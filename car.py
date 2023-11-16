@@ -31,13 +31,23 @@ car2_loc.center = left_lane, height*0.2
 counter = 0
 
 #game loop
-while running:
+def update_game_state():
+    global speed
+    global counter
     counter += 1
     if counter == 5000:
         speed += 0.15
         counter = 0 
-        print("LEVEL UP", speed)
-    #animated enmy vehicle
+    return speed, counter
+    print("LEVEL UP", speed)
+
+def check_collision():
+    return car_loc.colliderect(car2_loc)
+
+while running:
+    update_game_state()
+
+
     car2_loc[1] += speed
     if car2_loc[1] > height:
         if random.randint(0,1) == 0:
@@ -45,8 +55,10 @@ while running:
         else:
             car2_loc.center = left_lane, -200
 
+
+
     #end game
-    if car_loc[0] == car2_loc[0] and car2_loc[1] > car_loc[1] - 250:
+    if check_collision():
         print("GAME OVER! YOU LOST!")
         break
     #event listeners
